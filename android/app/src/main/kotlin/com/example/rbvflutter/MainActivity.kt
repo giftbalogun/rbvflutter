@@ -1,4 +1,4 @@
-package com.example.rbvflutter
+package com.giftbalogun.rbvflutter
 
 import io.flutter.embedding.android.FlutterActivity
 

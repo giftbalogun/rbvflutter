@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:rbvflutter/screen/about.dart';
+import 'package:rbvflutter/widget/float.dart';
 
 class HexColor extends Color {
   static int _getColorFromHex(String hexColor) {
@@ -33,20 +33,11 @@ class CryptoListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      //return Drawer(),
+      drawer: ExampleExpandableFab(),
       body: _buildBody(),
       backgroundColor: HexColor("A7762A"),
-      floatingActionButton: new FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Portfolio()),
-          );
-        },
-        backgroundColor: HexColor("A7762A"),
-        child: new Icon(
-          Icons.verified_user,
-        ),
-      ),
+      floatingActionButton: ExampleExpandableFab(),
     );
   }
 

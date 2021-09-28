@@ -1,8 +1,10 @@
-// ignore_for_file: use_key_in_widget_constructors, prefer_const_literals_to_create_immutables, prefer_const_constructors
+// ignore_for_file: use_key_in_widget_constructors, prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_print
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:rbvflutter/widget/float.dart';
 import 'package:rbvflutter/screen/home.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -12,6 +14,17 @@ class Portfolio extends StatefulWidget {
 }
 
 class _PortfolioState extends State<Portfolio> {
+  late FirebaseMessaging messaging;
+  @override
+  void initState() {
+    super.initState();
+    messaging = FirebaseMessaging.instance;
+    messaging.getToken().then((value) {});
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage event) {});
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {});
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget buttonSection = Row(
@@ -46,6 +59,7 @@ class _PortfolioState extends State<Portfolio> {
 
     return Scaffold(
       backgroundColor: HexColor("A7762A"),
+      floatingActionButton: ExampleExpandableFab(),
       body: ListView(children: [
         title,
         buttonSection,

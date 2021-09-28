@@ -38,6 +38,9 @@ dependencies:
   http: ^0.13.3
   url_launcher: ^6.0.12
   font_awesome_flutter: ^9.1.0
+  firebase_messaging: ^10.0.7
+  firebase_core: ^1.6.0
+  overlay_support: ^1.2.1
 
 dev_dependencies:
   flutter_test:
