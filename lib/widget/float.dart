@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:rbvflutter/screen/about.dart';
+import 'package:rbvflutter/screen/contact.dart';
 import 'package:rbvflutter/screen/home.dart';
 
 @immutable
@@ -35,6 +36,17 @@ class ExampleExpandableFab extends StatelessWidget {
             );
           },
           icon: const Icon(Icons.supervised_user_circle),
+        ),
+        ActionButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (BuildContext context) => const ContactePage(),
+              ),
+            );
+          },
+          icon: const Icon(Icons.mail),
         ),
       ],
     );
