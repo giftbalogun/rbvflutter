@@ -5,6 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:rbvflutter/screen/home.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 Future<void> _messageHandler(RemoteMessage message) async {}
 
@@ -13,6 +14,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_messageHandler);
+  MobileAds.instance.initialize();
 
   runApp(
     MaterialApp(

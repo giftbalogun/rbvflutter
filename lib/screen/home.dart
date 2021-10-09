@@ -1,6 +1,7 @@
-// ignore_for_file: unnecessary_null_comparison, unnecessary_new, prefer_const_constructors, use_key_in_widget_constructors, deprecated_member_use
+// ignore_for_file: unnecessary_null_comparison, unnecessary_new, prefer_const_constructors, use_key_in_widget_constructors, deprecated_member_use, must_be_immutable, non_constant_identifier_names
 
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -19,12 +20,15 @@ class HexColor extends Color {
 }
 
 Future<List> getCurrencies() async {
-  String apiUrl = 'https://royalbcodeventures.com.ng/rbv/api/apirates';
+  String apiUrl = 'http://royalbcodeventures.com.ng/api/currency';
   http.Response response = await http.get(Uri.parse(apiUrl));
   return json.decode(response.body)['data'];
 }
 
 class CryptoListWidget extends StatelessWidget {
+  late BannerAd bannerAd;
+  bool isLoaded = false;
+
   final List<MaterialColor> _colors = [Colors.blue, Colors.indigo, Colors.red];
   final List _currencies;
 
@@ -33,7 +37,6 @@ class CryptoListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      //return Drawer(),
       drawer: ExampleExpandableFab(),
       body: _buildBody(),
       backgroundColor: HexColor("A7762A"),
@@ -53,7 +56,18 @@ class CryptoListWidget extends StatelessWidget {
         margin: const EdgeInsets.fromLTRB(8.0, 56.0, 8.0, 0.0),
         child: new Column(
           // A column widget can have several widgets that are placed in a top down fashion
-          children: <Widget>[_getAppTitleWidget(), _getListViewWidget()],
+          children: <Widget>[
+            _getAppTitleWidget(),
+            _getListViewWidget(),
+            isLoaded
+                ? Container(
+                    height: 50,
+                    child: AdWidget(
+                      ad: bannerAd,
+                    ),
+                  )
+                : SizedBox(),
+          ],
         ),
       ),
     );
@@ -111,8 +125,7 @@ class CryptoListWidget extends StatelessWidget {
     );
   }
 
-  final imageurl =
-      "https://royalbcodeventures.com.ng/rbv/assets/images/currency/";
+  final imageurl = "http://royalbcodeventures.com.ng/assets/images/currency/";
 
   ListTile _getListTile(Map currency, MaterialColor color) {
     return new ListTile(
@@ -132,22 +145,6 @@ class CryptoListWidget extends StatelessWidget {
     );
   }
 }
-
-const ColorScheme _shrineColorScheme = ColorScheme(
-  primary: shrinePink100,
-  primaryVariant: shrineBrown900,
-  secondary: shrinePink50,
-  secondaryVariant: shrineBrown900,
-  surface: shrineSurfaceWhite,
-  background: shrineBackgroundWhite,
-  error: shrineErrorRed,
-  onPrimary: shrineBrown900,
-  onSecondary: shrineBrown900,
-  onSurface: shrineBrown900,
-  onBackground: shrineBrown900,
-  onError: shrineSurfaceWhite,
-  brightness: Brightness.light,
-);
 
 const Color shrinePink50 = Color(0xFFFEEAE6);
 const Color shrinePink100 = Color(0xFFFEDBD0);
