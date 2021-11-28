@@ -5,12 +5,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:rbvflutter/blocs/ads_bloc.dart';
+import 'package:rbvflutter/config/ad_config.dart';
+import 'package:rbvflutter/widget/banner_ad.dart';
+import 'package:rbvflutter/widget/drawer.dart';
 import 'package:rbvflutter/widget/float.dart';
 import 'package:rbvflutter/screen/home.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-const int maxFailedLoadAttempts = 3;
-const String testDevice = '32A3A411587C195EEE12AE7620855350';
 
 class Portfolio extends StatefulWidget {
   @override
@@ -20,30 +21,9 @@ class Portfolio extends StatefulWidget {
 class _PortfolioState extends State<Portfolio> {
   late FirebaseMessaging messaging;
 
-  late BannerAd bannerAd;
-  bool isLoaded = false;
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    bannerAd = BannerAd(
-      size: AdSize.banner,
-      adUnitId: "ca-app-pub-3940256099942544/6300978111",
-      listener: BannerAdListener(
-        onAdLoaded: (ad) {
-          setState(() {
-            isLoaded = true;
-          });
-          print("Banner Ad Loaded");
-        },
-        onAdFailedToLoad: (ad, error) {
-          isLoaded = false;
-          print('Failed to load a banner ad: ${error.message}');
-        },
-      ),
-      request: const AdRequest(),
-    );
-    bannerAd.load();
   }
 
   @override
@@ -89,8 +69,31 @@ class _PortfolioState extends State<Portfolio> {
       ],
     );
 
+    AppBar _buildAppBar() {
+      return AppBar(
+        title: Text(
+          'Current Market Rates',
+          style: new TextStyle(
+              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24.0),
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+        actions: [
+          IconButton(
+            icon: Image.asset(
+              'images/app_logo.png',
+              height: 50,
+            ),
+            onPressed: null,
+          ),
+        ],
+      );
+    }
+
     return Scaffold(
+      appBar: _buildAppBar(),
       backgroundColor: HexColor("A7762A"),
+      drawer: NavDrawer(),
       floatingActionButton: ExampleExpandableFab(),
       body: ListView(children: [
         title,
@@ -111,15 +114,7 @@ class _PortfolioState extends State<Portfolio> {
           color: getColorFromHex('#000000'),
         ),
         textSection,
-        isLoaded
-            ? Container(
-                height: bannerAd.size.height.toDouble(),
-                width: bannerAd.size.width.toDouble(),
-                child: AdWidget(
-                  ad: bannerAd,
-                ),
-              )
-            : SizedBox(),
+        AdConfig.isAdsEnabled == true ? BannerAdWidget() : Container(),
         website,
       ]),
     );

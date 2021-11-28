@@ -12,7 +12,7 @@ class ExampleExpandableFab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExpandableFab(
-      distance: 112.0,
+      distance: 100.0,
       children: [
         ActionButton(
           onPressed: () async {
@@ -25,28 +25,6 @@ class ExampleExpandableFab extends StatelessWidget {
             );
           },
           icon: const Icon(Icons.home),
-        ),
-        ActionButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (BuildContext context) => Portfolio(),
-              ),
-            );
-          },
-          icon: const Icon(Icons.supervised_user_circle),
-        ),
-        ActionButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (BuildContext context) => const ContactePage(),
-              ),
-            );
-          },
-          icon: const Icon(Icons.mail),
         ),
       ],
     );

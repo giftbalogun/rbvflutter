@@ -5,6 +5,9 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:rbvflutter/config/ad_config.dart';
+import 'package:rbvflutter/widget/banner_ad.dart';
+import 'package:rbvflutter/widget/drawer.dart';
 import 'package:rbvflutter/widget/float.dart';
 
 class HexColor extends Color {
@@ -20,15 +23,12 @@ class HexColor extends Color {
 }
 
 Future<List> getCurrencies() async {
-  String apiUrl = 'http://royalbcodeventures.com.ng/api/currency';
+  String apiUrl = 'http://royalbv.giftbalogun.name.ng/api/currency';
   http.Response response = await http.get(Uri.parse(apiUrl));
   return json.decode(response.body)['data'];
 }
 
 class CryptoListWidget extends StatelessWidget {
-  late BannerAd bannerAd;
-  bool isLoaded = false;
-
   final List<MaterialColor> _colors = [Colors.blue, Colors.indigo, Colors.red];
   final List _currencies;
 
@@ -37,10 +37,33 @@ class CryptoListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      drawer: ExampleExpandableFab(),
+      extendBodyBehindAppBar: true,
+      appBar: _buildAppBar(),
+      drawer: NavDrawer(),
       body: _buildBody(),
       backgroundColor: HexColor("A7762A"),
       floatingActionButton: ExampleExpandableFab(),
+    );
+  }
+
+  AppBar _buildAppBar() {
+    return AppBar(
+      title: Text(
+        'Current Market Rates',
+        style: new TextStyle(
+            color: Colors.white, fontWeight: FontWeight.bold, fontSize: 24.0),
+      ),
+      backgroundColor: Colors.transparent,
+      elevation: 0.0,
+      actions: [
+        IconButton(
+          icon: Image.asset(
+            'images/app_logo.png',
+            height: 50,
+          ),
+          onPressed: null,
+        ),
+      ],
     );
   }
 
@@ -57,16 +80,8 @@ class CryptoListWidget extends StatelessWidget {
         child: new Column(
           // A column widget can have several widgets that are placed in a top down fashion
           children: <Widget>[
-            _getAppTitleWidget(),
             _getListViewWidget(),
-            isLoaded
-                ? Container(
-                    height: 50,
-                    child: AdWidget(
-                      ad: bannerAd,
-                    ),
-                  )
-                : SizedBox(),
+            AdConfig.isAdsEnabled == true ? BannerAdWidget() : Container(),
           ],
         ),
       ),
@@ -125,7 +140,7 @@ class CryptoListWidget extends StatelessWidget {
     );
   }
 
-  final imageurl = "http://royalbcodeventures.com.ng/assets/images/currency/";
+  final imageurl = "http://royalbv.giftbalogun.name.ng/assets/images/currency/";
 
   ListTile _getListTile(Map currency, MaterialColor color) {
     return new ListTile(

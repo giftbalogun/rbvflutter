@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:rbvflutter/screen/home.dart';
 import 'package:rbvflutter/widget/float.dart';
 import 'package:http/http.dart' as http;
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+
+const int maxFailedLoadAttempts = 3;
 
 class ContactePage extends StatefulWidget {
   const ContactePage({Key? key}) : super(key: key);
@@ -16,6 +19,32 @@ class _ContactePageState extends State<ContactePage> {
   final controllerName = TextEditingController();
   final controllerEmail = TextEditingController();
   final controllerMessage = TextEditingController();
+
+  late BannerAd bannerAd;
+  bool isLoaded = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    bannerAd = BannerAd(
+      size: AdSize.banner,
+      adUnitId: "ca-app-pub-5537701541019565/6267193824",
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          setState(() {
+            isLoaded = true;
+          });
+          print("Banner Ad Loaded");
+        },
+        onAdFailedToLoad: (ad, error) {
+          isLoaded = false;
+          print('Failed to load a banner ad: ${error.message}');
+        },
+      ),
+      request: const AdRequest(),
+    );
+    bannerAd.load();
+  }
 
   clearTextInput() {
     controllerName.clear();
@@ -171,6 +200,16 @@ class _ContactePageState extends State<ContactePage> {
                     ],
                   ),
                 ),
+                const SizedBox(height: 8.0),
+                isLoaded
+                    ? Container(
+                        height: bannerAd.size.height.toDouble(),
+                        width: bannerAd.size.width.toDouble(),
+                        child: AdWidget(
+                          ad: bannerAd,
+                        ),
+                      )
+                    : SizedBox(),
               ],
             ),
           ),

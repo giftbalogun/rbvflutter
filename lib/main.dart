@@ -19,10 +19,10 @@ void main() async {
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'RBV Currency Rates',
+      title: 'RBV Market',
       home: AnimatedSplashScreen(
         duration: 4000,
-        splash: 'images/ic_launcher.png',
+        splash: Image.asset('images/1024.png', width: 1024, height: 440),
         nextScreen: CryptoListWidget(currencies),
         splashTransition: SplashTransition.sizeTransition,
         backgroundColor: Colors.white,
